@@ -8,15 +8,19 @@ export default function App() {
   const [state, dispatch] = useReducer(reducer, {
     cells: createArray(),
     player: 'One',
+    color: 'green',
   });
   return (
     <Styles>
       <h1>Connect Four</h1>
+      <h2>Player {state.player}</h2>
       <div className='App'>
         <div className='Board' onClick={() => dispatch({type: 'player'})}>
-          <Grid cells={state.cells} onClickGame={(i) => console.log(i)}/>
+          <Grid cells={state.cells} onClickGame={ (i) => dispatch({type: 'fill_cell', i})}/>
+          
           
         </div>
+        
       </div>
     </Styles>
   );
@@ -25,6 +29,7 @@ export default function App() {
 const Styles = styled.div`
   width: 100vw;
   background-color: pink;
+  text-align: center;
 
   .App {
     display: flex;
@@ -33,7 +38,6 @@ const Styles = styled.div`
 
   h1 {
     padding: 30px;
-    text-align: center;
     margin-block-end: 0px;
     margin-block-start: 0;
   }
@@ -50,7 +54,6 @@ const Styles = styled.div`
 
   .Cell {
     box-sizing: border-box;
-    background-color: white;
     border-radius: 100%;
     height: 70px;
     width: 70px;
