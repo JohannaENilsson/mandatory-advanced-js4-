@@ -6,14 +6,16 @@ import createArray from './components/createArray';
 
 export default function App() {
   const [state, dispatch] = useReducer(reducer, {
-    cells: createArray()
+    cells: createArray(),
+    player: 'One',
   });
   return (
     <Styles>
       <h1>Connect Four</h1>
       <div className='App'>
-        <div className='Board'>
-          <Grid cells={state.cells} />
+        <div className='Board' onClick={() => dispatch({type: 'player'})}>
+          <Grid cells={state.cells} onClickGame={(i) => console.log(i)}/>
+          
         </div>
       </div>
     </Styles>
@@ -54,5 +56,6 @@ const Styles = styled.div`
     width: 70px;
     text-align: center;
     line-height: 70px;
+    cursor: pointer;
   }
 `;
