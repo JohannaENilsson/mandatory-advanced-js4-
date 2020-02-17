@@ -1,3 +1,5 @@
+import createArray from '../components/createArray';
+
 export default function reducer(state, action) {
   switch (action.type) {
     case 'fill_cell':
@@ -27,6 +29,10 @@ export default function reducer(state, action) {
 
 
     case 'reset_game':
+        return {
+            ...state,
+            cells: createArray()
+        };
 
     default:
       return state;
