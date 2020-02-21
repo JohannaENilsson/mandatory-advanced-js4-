@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function Grid({ cells, onClickGame, onClickPlayer }) {
+export default function Grid({ cells, onClickGame }) {
   function onClick(index) {
     onClickGame(index);
-    onClickPlayer(index);
+    
   }
 
   return (

@@ -8,6 +8,8 @@ export default function App() {
   const [state, dispatch] = useReducer(reducer, {
     cells: createArray(),
     player: 'green',
+    countMove: 0,
+    winner: null,
   });
   return (
     <Styles>
@@ -18,7 +20,7 @@ export default function App() {
           <Grid
             cells={state.cells}
             onClickGame={i => dispatch({ type: 'fill_cell', i })}
-            onClickPlayer={i => dispatch({ type: 'player', i})}
+            
           />
         </div>
       </div>
