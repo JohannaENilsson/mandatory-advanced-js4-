@@ -7,25 +7,25 @@ import createArray from './components/createArray';
 export default function App() {
   const [state, dispatch] = useReducer(reducer, {
     cells: createArray(),
-    player: 'One',
-    color: 'green'
+    player: 'green',
   });
   return (
     <Styles>
       <h1>Connect Four</h1>
-      <h2>Player {state.player}</h2>
+      <h2>Player {state.player === "green" ? "One" : "Two"}</h2>
       <div className='App'>
-        <div className='Board' onClick={() => dispatch({ type: 'player' })}>
+        <div className='Board'>
           <Grid
             cells={state.cells}
             onClickGame={i => dispatch({ type: 'fill_cell', i })}
+            onClickPlayer={i => dispatch({ type: 'player', i})}
           />
         </div>
       </div>
       <button
         onClick={e => {
           e.preventDefault();
-          dispatch({ type: 'reset_game'});
+          dispatch({ type: 'reset_game' });
         }}
       >
         Reset

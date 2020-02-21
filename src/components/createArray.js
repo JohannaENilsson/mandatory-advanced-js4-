@@ -1,4 +1,6 @@
+import { ROW, COLUMN } from './GameSize';
+
 export default function createArray() {
-    const cells = Array(7 * 6).fill('white');
+    const cells = Array(COLUMN * ROW).fill('white');
     return cells;
   }
