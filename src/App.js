@@ -9,29 +9,31 @@ export default function App() {
     cells: createArray(),
     player: 'green',
     countMove: 0,
-    winner: null,
+    winner: null
   });
   return (
     <Styles>
       <h1>Connect Four</h1>
-      <h2>Player {state.player === "green" ? "One" : "Two"}</h2>
+      <h2>Player {state.player === 'green' ? 'One' : 'Two'}</h2>
+      {state.winner && <p>Winner is {state.winner}</p>}
       <div className='App'>
         <div className='Board'>
           <Grid
             cells={state.cells}
             onClickGame={i => dispatch({ type: 'fill_cell', i })}
-            
           />
         </div>
       </div>
-      <button
-        onClick={e => {
-          e.preventDefault();
-          dispatch({ type: 'reset_game' });
-        }}
-      >
-        Reset
-      </button>
+      {state.winner && (
+        <button
+          onClick={e => {
+            e.preventDefault();
+            dispatch({ type: 'reset_game' });
+          }}
+        >
+          Reset
+        </button>
+      )}
     </Styles>
   );
 }

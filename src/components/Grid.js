@@ -1,9 +1,8 @@
 import React from 'react';
 
-export default function Grid({ cells, onClickGame }) {
+export default function Grid({ cells, colorOnCell, onClickGame }) {
   function onClick(index) {
     onClickGame(index);
-    
   }
 
   return (
@@ -15,7 +14,9 @@ export default function Grid({ cells, onClickGame }) {
             className='Cell'
             onClick={() => onClick(i)}
             style={{ backgroundColor: cell }}
-          ></div>
+          >
+            {i}{' '}
+          </div>
         );
       })}
     </>
