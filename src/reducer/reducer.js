@@ -1,4 +1,4 @@
-import {dropDisc, reset} from '../components/Utils';
+import { dropDisc, reset } from '../components/Utils';
 import { COLUMN, ROW } from '../components/GameSize';
 
 export default function reducer(state, action) {
@@ -25,7 +25,8 @@ export default function reducer(state, action) {
       // if (state.countMove > 1) {
       // let didSomeOneWin = checkColumn(newCells);
       // let didSomeOneWin = checkRowcheckRow(newCells);
-      let didSomeOneWin = checkDiagonal(newCells);
+      // let didSomeOneWin = checkDiagonalRight(newCells);
+      let didSomeOneWin = checkDiagonalLeft(newCells);
       // console.log(didSomeOneWin);
       // // }
 
@@ -52,60 +53,26 @@ export default function reducer(state, action) {
   }
 }
 
-// function checkRow(cells){
-//   let rowNr=0;
-//   let colNr=0;
-//   for(let row = 0; row < 7; row++){
-//     console.log('Row ', rowNr++);
-//     for(let col = 0; col < 4; col++){
-//       console.log(colNr++);
-//       if(cells[row * 7 + col] !== 'white'){
-//         console.log('nu');
-//       }
-//     }
-//   }
-//   return null;
-// }
-
-
-function checkDiagonal(cells) {
-  // console.log('>> checkDiagonal');
+function checkDiagonalLeft(cells) {
   for (let row = 0; row < 3; row++) {
     const rowIdx = row * 7;
 
-    // for (let col = rowIdx; col < (rowIdx + 4); col++) {
-    for (let col = 0; col < 4; col++) {
-    
-      console.log(`Checking for winner on row: ${row}, col: ${col} => ${rowIdx + col}`);
-      //only loop to middle
-      // const currentCell = cells[col];
+    for (let col = 6; col > 2; col--) {
       const currentCell = cells[rowIdx + col];
       if (currentCell !== 'white') {
-        console.log('checking diagonal winner..');
-        
         let fourInARow = true;
         for (let rowAhead = 1; rowAhead < 4; rowAhead++) {
-          // rowIdx + col == 17
-          // (rowIdx + col) + 7 + 1 = 25 
-          // (rowIdx + col) + 7 + 1 = 33
-          // (rowIdx + col) + 7 + 1 = 41
-
-
-          const nextIdx = rowIdx + col + (rowAhead * 8); //(col + rowAhead) * 7 + rowAhead;
-          console.log(`Checking (${col} + ${rowAhead}) * 7 + ${rowAhead} =>  ${nextIdx}`);
-          // const nextIdx = (col + rowAhead) + rowAhead;
+          // kollar de kommande tre raderna.
+          const nextIdx = currentCell + rowAhead * 6; // nuvarande rad + framtida raden * 6 (vi vill gå ett steg tillbaka)
           const nextCell = cells[nextIdx];
 
-          if (nextCell === 'white') {
+          if (nextCell === 'white' || currentCell !== nextCell) {
             fourInARow = false;
+            break; // avbryter denna loopen och börjar kolla nästa.
           }
-
-          console.log(`Checking for winner on row: ${row}, col: ${col} => ${nextIdx}`);
         }
-        console.log('FOUND FOR IN A ROW? => ', fourInARow);
 
-        if(fourInARow) {
-          console.log("FOUND A WINNER, starting on: ", currentCell);
+        if (fourInARow) {
           return currentCell;
         }
       }
@@ -113,40 +80,48 @@ function checkDiagonal(cells) {
   }
 
   return null;
+}
 
-  // for (let row = 0; row < 6; row++) {
-  //   for (let col = 0; col < 4; col++) {
-  //     console.log(`row: ${row}, col: ${col} => ${row * 7 + col}`);
-  //     const currentCellIdx = (row * 7 + col);
-  //     const currentCell = cells[row * 7 + col];
-  //     if (currentCell !== 'white') {
-  //       if (
-  //         currentCell === cells[currentCellIdx+1] &&
-  //         currentCell === cells[currentCellIdx+2] &&
-  //         currentCell === cells[currentCellIdx+3]
-  //       ) {
-  //         console.log(currentCell, 'WINNER');
-  //         return currentCell;
-  //       }
-  //     }
-  //   }
-  // }
-  // return null;
+function checkDiagonalRight(cells) {
+  for (let row = 0; row < 3; row++) {
+    const rowIdx = row * 7;
+
+    for (let col = 0; col < 4; col++) {
+      const currentCell = cells[rowIdx + col];
+      if (currentCell !== 'white') {
+        let fourInARow = true;
+        for (let rowAhead = 1; rowAhead < 4; rowAhead++) {
+          const nextIdx = currentCell + rowAhead * 8; //(col + rowAhead) * 7 + rowAhead;
+
+          const nextCell = cells[nextIdx];
+
+          if (nextCell === 'white' || currentCell !== nextCell) {
+            fourInARow = false;
+            break;
+          }
+        }
+
+        if (fourInARow) {
+          return currentCell;
+        }
+      }
+    }
+  }
+
+  return null;
 }
 
 function checkRow(cells) {
   for (let row = 0; row < 6; row++) {
     for (let col = 0; col < 4; col++) {
-      console.log(`row: ${row}, col: ${col} => ${row * 7 + col}`);
-      const currentCellIdx = (row * 7 + col);
+      const currentCellIdx = row * 7 + col;
       const currentCell = cells[row * 7 + col];
       if (currentCell !== 'white') {
         if (
-          currentCell === cells[currentCellIdx+1] &&
-          currentCell === cells[currentCellIdx+2] &&
-          currentCell === cells[currentCellIdx+3]
+          currentCell === cells[currentCellIdx + 1] &&
+          currentCell === cells[currentCellIdx + 2] &&
+          currentCell === cells[currentCellIdx + 3]
         ) {
-          console.log(currentCell, 'WINNER');
           return currentCell;
         }
       }
@@ -155,22 +130,16 @@ function checkRow(cells) {
   return null;
 }
 
-
 function checkColumn(cells) {
   for (let row = 0; row < 3; row++) {
     for (let col = 0; col < 7; col++) {
-      console.log(`row: ${row}, col: ${col} => ${row * 7 + col}`);
       const currentIdx = row * 7 + col;
       if (cells[currentIdx] !== 'white') {
         if (
           cells[currentIdx] === cells[currentIdx + 7] &&
           cells[currentIdx] === cells[currentIdx + 14] &&
           cells[currentIdx] === cells[currentIdx + 21]
-          // cells[currentIdx] === cells[(row + 1) * 7 + col] &&
-          // cells[currentIdx] === cells[(row + 2) * 7 + col] &&
-          // cells[currentIdx] === cells[(row + 3) * 7 + col]
         ) {
-          console.log(cells[currentIdx], 'WINNER');
           return cells[row * 7 + col];
         }
       }
@@ -178,5 +147,3 @@ function checkColumn(cells) {
   }
   return null;
 }
-
-
