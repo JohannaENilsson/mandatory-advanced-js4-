@@ -3,7 +3,6 @@ import { dropDisc, reset } from '../components/Utils';
 export default function reducer(state, action) {
   switch (action.type) {
     case 'fill_cell':
-
       if (state.cells[action.i] !== 'white') {
         return state;
       }
@@ -18,13 +17,15 @@ export default function reducer(state, action) {
       let id = dropDisc(action.i, state.cells);
       newCells[id] = state.player;
 
-
       // if (state.countMove > 1) {
 
       let didSomeOneWin = checkIfSomeOneWon(newCells, state.player);
-     
+
       // console.log(didSomeOneWin);
       // // }
+      if (didSomeOneWin === -1) {
+        console.log('it´s a tie');
+      }
 
       return {
         ...state,
@@ -49,14 +50,19 @@ export default function reducer(state, action) {
   }
 }
 
-function checkIfSomeOneWon(cells, player){
-  if(checkColumn(cells) || checkRow(cells) || checkDiagonalLeft(cells) || checkDiagonalRight(cells)){
+function checkIfSomeOneWon(cells, player) {
+  if (
+    checkColumn(cells) ||
+    checkRow(cells) ||
+    checkDiagonalLeft(cells) ||
+    checkDiagonalRight(cells)
+  ) {
     return player;
-  } else{
+  } else if (cells.filter(item => item === 'white').length > 0) {
     return null;
   }
 
-
+  return 'It´s a tie'; // its a tie
 }
 
 function checkDiagonalLeft(cells) {
@@ -66,12 +72,11 @@ function checkDiagonalLeft(cells) {
     for (let col = 6; col > 2; col--) {
       const currentIdx = rowIdx + col;
       const currentCell = cells[currentIdx];
-      console.log('row', row );
-      
-      
+      console.log('row', row);
+
       if (currentCell !== 'white') {
         let fourInARow = true;
-      
+
         for (let rowAhead = 1; rowAhead < 4; rowAhead++) {
           // kollar de kommande tre raderna.
 
@@ -79,7 +84,6 @@ function checkDiagonalLeft(cells) {
           const nextCell = cells[nextIdx];
 
           console.log(`row ${row} col ${col} => ${nextIdx}`);
-          
 
           if (nextCell === 'white' || currentCell !== nextCell) {
             fourInARow = false;
