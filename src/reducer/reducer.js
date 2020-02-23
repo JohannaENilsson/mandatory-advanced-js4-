@@ -1,4 +1,4 @@
-import createArray from '../components/createArray';
+import {dropDisc, reset} from '../components/Utils';
 import { COLUMN, ROW } from '../components/GameSize';
 
 export default function reducer(state, action) {
@@ -52,13 +52,7 @@ export default function reducer(state, action) {
   }
 }
 
-function reset({ cells, player, countMove, winner }) {
-  cells = createArray();
-  player = 'green';
-  countMove = 0;
-  winner = null;
-  return { cells, player, countMove, winner };
-}
+
 
 function checkColumn(cells) {
   for (let row = 0; row < 3; row++) {
@@ -78,16 +72,4 @@ function checkColumn(cells) {
   return null;
 }
 
-function dropDisc(cellIdx, cells) {
-  let currentRow = cellIdx;
-  let numberOfCellsInCurrentColumn = COLUMN;
 
-  if (cells[cellIdx] === 'white') {
-    while (numberOfCellsInCurrentColumn >= 0) {
-      currentRow += 7;
-      if (cells[currentRow] !== 'white') {
-        return currentRow - 7;
-      }
-    }
-  }
-}

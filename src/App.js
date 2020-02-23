@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import Grid from './components/Grid';
 import styled from 'styled-components';
 import reducer from './reducer/reducer';
-import createArray from './components/createArray';
+import {createArray} from './components/Utils';
 
 export default function App() {
   const [state, dispatch] = useReducer(reducer, {
