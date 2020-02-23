@@ -1,10 +1,8 @@
 import { dropDisc, reset } from '../components/Utils';
-import { COLUMN, ROW } from '../components/GameSize';
 
 export default function reducer(state, action) {
   switch (action.type) {
     case 'fill_cell':
-      // console.log(action.i);
 
       if (state.cells[action.i] !== 'white') {
         return state;
@@ -20,13 +18,11 @@ export default function reducer(state, action) {
       let id = dropDisc(action.i, state.cells);
       newCells[id] = state.player;
 
-      // console.log(newCells);
 
       // if (state.countMove > 1) {
-      // let didSomeOneWin = checkColumn(newCells);
-      // let didSomeOneWin = checkRowcheckRow(newCells);
-      // let didSomeOneWin = checkDiagonalRight(newCells);
-      let didSomeOneWin = checkDiagonalLeft(newCells);
+
+      let didSomeOneWin = checkIfSomeOneWon(newCells, state.player);
+     
       // console.log(didSomeOneWin);
       // // }
 
@@ -53,18 +49,37 @@ export default function reducer(state, action) {
   }
 }
 
+function checkIfSomeOneWon(cells, player){
+  if(checkColumn(cells) || checkRow(cells) || checkDiagonalLeft(cells) || checkDiagonalRight(cells)){
+    return player;
+  } else{
+    return null;
+  }
+
+
+}
+
 function checkDiagonalLeft(cells) {
   for (let row = 0; row < 3; row++) {
     const rowIdx = row * 7;
 
     for (let col = 6; col > 2; col--) {
-      const currentCell = cells[rowIdx + col];
+      const currentIdx = rowIdx + col;
+      const currentCell = cells[currentIdx];
+      console.log('row', row );
+      
+      
       if (currentCell !== 'white') {
         let fourInARow = true;
+      
         for (let rowAhead = 1; rowAhead < 4; rowAhead++) {
           // kollar de kommande tre raderna.
-          const nextIdx = currentCell + rowAhead * 6; // nuvarande rad + framtida raden * 6 (vi vill gå ett steg tillbaka)
+
+          const nextIdx = currentIdx + rowAhead * 6; // nuvarande rad + framtida raden * 6 (vi vill gå ett steg tillbaka)
           const nextCell = cells[nextIdx];
+
+          console.log(`row ${row} col ${col} => ${nextIdx}`);
+          
 
           if (nextCell === 'white' || currentCell !== nextCell) {
             fourInARow = false;
@@ -87,11 +102,12 @@ function checkDiagonalRight(cells) {
     const rowIdx = row * 7;
 
     for (let col = 0; col < 4; col++) {
-      const currentCell = cells[rowIdx + col];
+      const currentIdx = rowIdx + col;
+      const currentCell = cells[currentIdx];
       if (currentCell !== 'white') {
         let fourInARow = true;
         for (let rowAhead = 1; rowAhead < 4; rowAhead++) {
-          const nextIdx = currentCell + rowAhead * 8; //(col + rowAhead) * 7 + rowAhead;
+          const nextIdx = currentIdx + rowAhead * 8; //(col + rowAhead) * 7 + rowAhead;
 
           const nextCell = cells[nextIdx];
 

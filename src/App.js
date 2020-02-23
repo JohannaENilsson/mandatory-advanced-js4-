@@ -14,8 +14,7 @@ export default function App() {
   return (
     <Styles>
       <h1>Connect Four</h1>
-      <h2>Player {state.player === 'green' ? 'One' : 'Two'}</h2>
-      {state.winner && <p>Winner is {state.winner}</p>}
+      {state.winner && <h2>Winner is {state.winner}</h2>}
       <div className='App'>
         <div className='Board'>
           <Grid
