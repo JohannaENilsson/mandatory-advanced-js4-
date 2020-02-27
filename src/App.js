@@ -13,8 +13,8 @@ export default function App() {
   });
   return (
     <>
-      <h1>Connect Four</h1>
-      {state.winner && <h2>Winner is {state.winner}</h2>}
+      {state.winner ? <h1 style={{ color: state.winner}}>Winner is {state.winner}</h1> : <h1>Connect Four</h1>}
+
       <div className='App'>
         <div className='Board'>
           <Grid
@@ -23,7 +23,6 @@ export default function App() {
           />
         </div>
       </div>
-
       {state.winner && (
         <button
           onClick={e => {
